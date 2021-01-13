@@ -1,0 +1,33 @@
+{
+  "name": "book-library-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/**/*.test.js",
+    "start": "nodemon -r dotenv/config index.js",
+    "prestart": "node scripts/create-database.js",
+    "pretest": "node scripts/create-database.js test",
+    "posttest": "node script/drop-database.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ro8inro8in/book-library-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ro8inro8in/book-library-api/issues"
+  },
+  "homepage": "https://github.com/ro8inro8in/book-library-api#readme",
+  "description": "",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mocha": "^8.2.1",
+    "mysql2": "^2.2.5",
+    "nodemon": "^2.0.7",
+    "sequelize": "^6.3.5",
+    "supertest": "^6.0.1"
+  }
+}
