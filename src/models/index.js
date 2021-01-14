@@ -9,9 +9,13 @@ const setupDatabase = () => {
         dialect: 'mysql',
         logging: false,
     });
+//missed this const reader just added in. V
+    const Reader = ReaderModel(sequelize, Sequelize);
 
 sequelize.sync({ alter: true });
-        return {};
+        return {
+          Reader,
+        };
 };
 
 
