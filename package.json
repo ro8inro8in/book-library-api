@@ -23,12 +23,16 @@
   "dependencies": {
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
-    "eslint": "^7.17.0",
     "express": "^4.17.1",
     "mocha": "^8.2.1",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.7",
     "sequelize": "^6.3.5",
     "supertest": "^6.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
   }
 }
