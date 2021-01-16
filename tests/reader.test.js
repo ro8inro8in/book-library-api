@@ -23,6 +23,7 @@ describe("/readers", () => {
       const response = await request(app).post("/readers").send({
         name: "Jane Doe",
         email: "J_Doe@email.com",
+        password: "Password1",
       });
       expect(response.status).to.equal(201);
       expect(response.body.name).to.equal("Jane Doe");
@@ -31,15 +32,16 @@ describe("/readers", () => {
       });
       expect(insertedReaderRecords.name).to.equal("Jane Doe");
       expect(insertedReaderRecords.email).to.equal("J_Doe@email.com");
+      expect(insertedReaderRecords.password).to.equal("Password1");
     });
   });
   describe("with readers in the database", () => {
     let readers;
     beforeEach((done) => {
       Promise.all([
-        Reader.create({ name: "Jane Doe", email: "J_Doe@email.com" }),
-        Reader.create({ name: "Jim Doe", email: "jim_doe@email.com" }),
-        Reader.create({ name: "Jo Jim", email: "jo_jimmy666@email.com" }),
+        Reader.create({ name: "Jane Doe", email: "J_Doe@email.com", password: "Password1"}),
+        Reader.create({ name: "Jim Doe", email: "jim_doe@email.com", password: "Password1" }),
+        Reader.create({ name: "Jo Jim", email: "jo_jimmy666@email.com", password: "Password1" }),
       ]).then((documents) => {
         readers = documents;
         done();
@@ -53,6 +55,7 @@ describe("/readers", () => {
             expect(res.status).to.equal(200);
             expect(res.body.name).to.equal(readers.name);
             expect(res.body.email).to.equal(readers.email);
+            expect(res.body.password).to.equal(readers.password);
             done();
           })
           .catch((error) => done(error));
@@ -67,6 +70,7 @@ describe("/readers", () => {
             expect(res.status).to.equal(200);
             expect(res.body.name).to.equal(reader.name);
             expect(res.body.email).to.equal(reader.email);
+            expect(res.body.password).to.equal(reader.password);
             done();
           })
           .catch((error) => done(error));
