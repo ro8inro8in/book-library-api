@@ -1,6 +1,6 @@
 module.exports = (connection, DataTypes) => {
   const schema = {
-    book: DataTypes.STRING,
+    name: DataTypes.STRING,
     author: DataTypes.STRING,
   };
 
