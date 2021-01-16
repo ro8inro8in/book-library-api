@@ -18,4 +18,6 @@ router.delete('/:id', readerController.deletesReader);
 
 router.post('/:id/books', booksController.create);
 
+router.get('/:id/books', booksController.getBooks);
+
 module.exports = router;

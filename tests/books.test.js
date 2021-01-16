@@ -40,16 +40,51 @@ describe("/books", () => {
           author: "Homer",
         })
         .then((res) => {
-          console.log(res.body)
           expect(res.status).to.equal(201);
           Book.findByPk(res.body.id, { raw: true })
             .then((book) => {
               expect(book.name).to.equal("Odyssey");
               expect(book.author).to.equal("Homer");
-              //expect(book.artistId).to.equal(artist.id);
+              expect(book.readerId).to.equal(reader.id);
               done();
             })
             .catch((error) => done(error));
+        })
+        .catch((error) => done(error));
+    });
+    it("returns a 404 and does not create a book if the reader does not exist", (done) => {
+      request(app)
+        .post("/readers/1234/books")
+        .send({
+          name: "Odyssey",
+          author: "Homer",
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal("The reader could not be found.");
+          Book.findAll()
+            .then((books) => {
+              expect(books.length).to.equal(3);
+              done();
+            })
+            .catch((error) => done(error));
+        })
+        .catch((error) => done(error));
+    });
+  });
+  describe("GET /books", () => {
+    it("gets all book records", (done) => {
+      request(app)
+        .get(`/readers/${reader.id}/books`)
+        .then((res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.length).to.equal(3);
+          res.body.forEach((book) => {
+            const expected = books.find((a) => a.id === book.id);
+            expect(book.name).to.equal(expected.name);
+            expect(book.author).to.equal(expected.author);
+          });
+          done();
         })
         .catch((error) => done(error));
     });

@@ -24,3 +24,8 @@ exports.create = (req, res) => {
       res.status(500).json(error);
     });
 };
+exports.getBooks = (_, res) => {
+  Book.findAll().then((books) => {
+    res.status(200).json(books);
+  });
+};
