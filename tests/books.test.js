@@ -89,4 +89,32 @@ describe("/books", () => {
         .catch((error) => done(error));
     });
   });
+
+  // Just started booksById nothing working yet so will pick up later.
+  describe("GET /books/:id", () => {
+    it("gets book by ID", (done) => {
+      const book = books[0];
+      request(app)
+        .get(`/books/${book.id}`)
+        .then((res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal(book.name);
+          expect(res.body.author).to.equal(book.author);
+          done();
+        })
+        .catch((error) => done(error));
+    });
+    it("returns a 404 if the artist does not exist", (done) => {
+      request(app)
+        .get("/books/12345")
+        .then((res) => {
+          console.log(1)
+          expect(res.status).to.equal(404);
+          console.log(2)
+          expect(res.body.error).to.equal("The reader could not be found.");
+          done();
+        })
+        .catch((error) => done(error));
+    });
+  });
 });

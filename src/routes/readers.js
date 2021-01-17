@@ -20,4 +20,6 @@ router.post('/:id/books', booksController.create);
 
 router.get('/:id/books', booksController.getBooks);
 
+router.get('/:id', booksController.getBooksById);
+
 module.exports = router;
