@@ -108,10 +108,75 @@ describe("/books", () => {
       request(app)
         .get("/books/12345")
         .then((res) => {
-          console.log(1)
+          console.log(1);
           expect(res.status).to.equal(404);
-          console.log(2)
+          console.log(2);
           expect(res.body.error).to.equal("The reader could not be found.");
+          done();
+        })
+        .catch((error) => done(error));
+    });
+  });
+  describe("PATCH /books/:id", () => {
+    it("updates book name by id", (done) => {
+      const book = books[0];
+      request(app)
+        .patch(`/books/${book.id}`)
+        .send({ name: "Ishmael" })
+        .then((res) => {
+          expect(res.status).to.equal(200);
+          Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+            expect(updatedBook.name).to.equal("Ishmael");
+            done();
+          });
+        })
+        .catch((error) => done(error));
+    });
+    it("updates book author by id", (done) => {
+      const book = books[0];
+      request(app)
+        .patch(`/books/${book.id}`)
+        .send({ author: "Daniel Quinn" })
+        .then((res) => {
+          expect(res.status).to.equal(200);
+          Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+            expect(updatedBook.author).to.equal("Daniel Quinn");
+            done();
+          });
+        })
+        .catch((error) => done(error));
+    });
+    it("returns a 404 if the book does not exist", (done) => {
+      request(app)
+        .patch("/books/12345")
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal("The reader could not be found.");
+          done();
+        })
+        .catch((error) => done(error));
+    });
+  });
+  describe("DELETE /books/:bookId", () => {
+    it("deletes book record by id", (done) => {
+      const book = books[0];
+      request(app)
+        .delete(`/books/${book.id}`)
+        .then((res) => {
+          expect(res.status).to.equal(204);
+          Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+            expect(updatedBook).to.equal(null);
+            done();
+          });
+        })
+        .catch((error) => done(error));
+    });
+    it("returns a 404 if the book does not exist", (done) => {
+      request(app)
+        .delete("/books/54321")
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal("The book could not be found.");
           done();
         })
         .catch((error) => done(error));
