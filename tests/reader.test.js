@@ -34,14 +34,100 @@ describe("/readers", () => {
       expect(insertedReaderRecords.email).to.equal("J_Doe@email.com");
       expect(insertedReaderRecords.password).to.equal("Password1");
     });
-  });
+//------------------------------------------------------------------------
+    xit("returns a 404 if the name is null", async () => {
+      await request(app)
+        .post("/readers/")
+        .send({
+          name: "",
+          email: "J_Doe@email.com",
+          password: "Pass",
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal("All fields must be completed.");
+        })
+        .catch((error) => done(error));
+    });
+    xit("returns a 404 if the email is null", async () => {
+      await request(app)
+        .post("/readers/")
+        .send({
+          name: "Jane Doe",
+          email: "",
+          password: "Pass",
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal("All fields must be completed.");
+        })
+        .catch((error) => done(error));
+    });
+    xit("returns a 404 if the password is null", async () => {
+      await request(app)
+        .post("/readers/")
+        .send({
+          name: "Jane Doe",
+          email: "J_Doe@email.com",
+          password: "",
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal("All fields must be completed.");
+        })
+        .catch((error) => done(error));
+    });
+    xit("returns a 404 if the reader email invalid", async () => {
+      await request(app)
+        .post("/readers/")
+        .send({
+          name: "Jane Doe",
+          email: "J_Doeemailemail.you",
+          password: "Password1",
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal("The email address is invalid.");
+        })
+        .catch((error) => done(error));
+    });
+    xit("returns a 404 if the password is less than 8 characters", async () => {
+      await request(app)
+        .post("/readers/")
+        .send({
+          name: "Jane Doe",
+          email: "J_Doe@email.com",
+          password: "Pass",
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal(
+            "Password must be at least 8 characters."
+          );
+        })
+        .catch((error) => done(error));
+    });
+  })
+  //------------------------------------------------------------------------
   describe("with readers in the database", () => {
     let readers;
     beforeEach((done) => {
       Promise.all([
-        Reader.create({ name: "Jane Doe", email: "J_Doe@email.com", password: "Password1"}),
-        Reader.create({ name: "Jim Doe", email: "jim_doe@email.com", password: "Password1" }),
-        Reader.create({ name: "Jo Jim", email: "jo_jimmy666@email.com", password: "Password1" }),
+        Reader.create({
+          name: "Jane Doe",
+          email: "J_Doe@email.com",
+          password: "Password1",
+        }),
+        Reader.create({
+          name: "Jim Doe",
+          email: "jim_doe@email.com",
+          password: "Password1",
+        }),
+        Reader.create({
+          name: "Jo Jim",
+          email: "jo_jimmy666@email.com",
+          password: "Password1",
+        }),
       ]).then((documents) => {
         readers = documents;
         done();
@@ -112,8 +198,8 @@ describe("/readers", () => {
           .catch((error) => done(error));
       });
     });
-    describe('DELETE /reader/:id', () => {
-      it('deletes reader record by id', async () => {
+    describe("DELETE /reader/:id", () => {
+      it("deletes reader record by id", async () => {
         const reader = readers[0];
         const response = await request(app).delete(`/readers/${reader.id}`);
         const deletedReader = await Reader.findByPk(reader.id, { raw: true });
@@ -121,10 +207,10 @@ describe("/readers", () => {
         expect(response.status).to.equal(204);
         expect(deletedReader).to.equal(null);
       });
-      it('returns a 404 if the reader does not exist', async () => {
-        const response = await request(app).delete('/readers/12345');
+      it("returns a 404 if the reader does not exist", async () => {
+        const response = await request(app).delete("/readers/12345");
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal('The reader could not be found');
+        expect(response.body.error).to.equal("The reader could not be found");
       });
     });
   });
