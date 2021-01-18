@@ -60,6 +60,31 @@ describe("/books", () => {
         })
         .catch((error) => done(error));
     });
+    it("returns a 404 if the name of book is null", async () => {
+      await request(app)
+        .post("/books/1234/books")
+        .send({
+          name: "Odyssey",
+          
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal("All fields must be completed.");
+        })
+        .catch((error) => done(error));
+    });
+    it("returns a 404 if the author is null", async () => {
+      await request(app)
+        .post("/books/1234/books")
+        .send({
+          author: "Homer",
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal("All fields must be completed.");
+        })
+        .catch((error) => done(error));
+    });
     it("returns a 404 and does not create a book if the reader does not exist", (done) => {
       request(app)
         .post("/books/1234/books")
