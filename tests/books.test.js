@@ -56,6 +56,7 @@ describe("/books", () => {
               done();
             })
             .catch((error) => done(error));
+          
         })
         .catch((error) => done(error));
     });
@@ -67,6 +68,7 @@ describe("/books", () => {
           author: "Homer",
           genre: "Greek epic poem",
           ISBN: "1234"
+          
         })
         .then((res) => {
           expect(res.status).to.equal(404);
@@ -119,9 +121,7 @@ describe("/books", () => {
       request(app)
         .get("/books/12345")
         .then((res) => {
-          console.log(1);
           expect(res.status).to.equal(404);
-          console.log(2);
           expect(res.body.error).to.equal("The reader could not be found.");
           done();
         })

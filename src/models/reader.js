@@ -1,27 +1,28 @@
 module.exports = (connection, DataTypes) => {
   const schema = {
-    name: {
+   name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      notNull: true,
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
+      notNull: true,
       validate: {
         isEmail: true,
       },
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      notNull: true,
       validate: {
         len: {
           args: [8, 100],
-          msg: "Must be more than 8 characters long",
-        },
-      },
-    },
+          msg: "Password must be at least 8 characters."
+        }
+      }
+    }
   };
+
 
   const readerModel = connection.define("reader", schema);
   return readerModel;

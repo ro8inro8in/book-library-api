@@ -35,9 +35,9 @@ describe("/readers", () => {
       expect(insertedReaderRecords.password).to.equal("Password1");
     });
 //------------------------------------------------------------------------
-    xit("returns a 404 if the name is null", async () => {
+    it("returns a 404 if the name is null", async () => {
       await request(app)
-        .post("/readers/")
+        .post("/readers")
         .send({
           name: "",
           email: "J_Doe@email.com",
@@ -49,9 +49,9 @@ describe("/readers", () => {
         })
         .catch((error) => done(error));
     });
-    xit("returns a 404 if the email is null", async () => {
+    it("returns a 404 if the email is null", async () => {
       await request(app)
-        .post("/readers/")
+        .post("/readers")
         .send({
           name: "Jane Doe",
           email: "",
@@ -63,9 +63,9 @@ describe("/readers", () => {
         })
         .catch((error) => done(error));
     });
-    xit("returns a 404 if the password is null", async () => {
+    it("returns a 404 if the password is null", async () => {
       await request(app)
-        .post("/readers/")
+        .post("/readers")
         .send({
           name: "Jane Doe",
           email: "J_Doe@email.com",
@@ -77,9 +77,9 @@ describe("/readers", () => {
         })
         .catch((error) => done(error));
     });
-    xit("returns a 404 if the reader email invalid", async () => {
+    it("returns a 404 if the reader email invalid", async () => {
       await request(app)
-        .post("/readers/")
+        .post("/readers")
         .send({
           name: "Jane Doe",
           email: "J_Doeemailemail.you",
@@ -91,13 +91,13 @@ describe("/readers", () => {
         })
         .catch((error) => done(error));
     });
-    xit("returns a 404 if the password is less than 8 characters", async () => {
+    it("returns a 404 if the password is less than 8 characters", async () => {
       await request(app)
-        .post("/readers/")
+        .post("/readers")
         .send({
           name: "Jane Doe",
           email: "J_Doe@email.com",
-          password: "Pass",
+          password: "P",
         })
         .then((res) => {
           expect(res.status).to.equal(404);

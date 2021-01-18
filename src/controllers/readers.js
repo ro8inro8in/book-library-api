@@ -5,12 +5,16 @@ const { Reader } = require("../models");
 };*/
 
 exports.create = (req, res) => {
-  if (req.body.name === '' || req.body.email === '' || req.body.password === '') {
-    res.status(404).json({ error: 'All fields must be completed.' });
-  } else if (req.body.email.indexOf('@') === -1) {
-    res.status(404).json({ error: 'The email address is invalid.' });
+  if (
+    req.body.name === "" ||
+    req.body.email === "" ||
+    req.body.password === ""
+  ) {
+    res.status(404).json({ error: "All fields must be completed." });
+  } else if (req.body.email.indexOf("@") === -1) {
+    res.status(404).json({ error: "The email address is invalid." });
   } else if (req.body.password.length < 8) {
-    res.status(404).json({ error: 'Password must be at least 8 characters.' });
+    res.status(404).json({ error: "Password must be at least 8 characters." });
   } else {
     Reader.create(req.body).then((reader) => res.status(201).json(reader));
   }
