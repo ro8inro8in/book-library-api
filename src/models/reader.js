@@ -17,7 +17,7 @@ module.exports = (connection, DataTypes) => {
       validate: {
         len: {
           args: [8, 100],
-          msg: "Password must be at least 8 characters."
+          msg: "Password must be minimum 8 characters."
         }
       }
     }
