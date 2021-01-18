@@ -6,6 +6,8 @@ const { Reader, Book } = require("../src/models");
 describe("/books", () => {
   let reader;
   let books;
+  let genre;
+  let ISBN;
   before(async () => {
     try {
       await Reader.sequelize.sync();
@@ -23,21 +25,24 @@ describe("/books", () => {
         email: "J_Doe@email.com",
       });
       books = await Promise.all([
-        Book.create({ name: "Odyssey", author: "Homer" }),
-        Book.create({ name: "Ishmael", author: "Daniel Quinn" }),
-        Book.create({ name: "Tao Te Ching", author: "Lau Tzu" }),
+        Book.create({ name: "Odyssey", author: "Homer", genre: "Greek epic poem", ISBN: "1234" }),
+        Book.create({ name: "Ishmael", author: "Daniel Quinn", genre: "Philosophical novel", ISBN: "4321" }),
+        Book.create({ name: "Tao Te Ching", author: "Lau Tzu", genre: "Philosophy", ISBN: "9876" }),
       ]);
     } catch (err) {
       console.log(err);
     }
   });
+  //------------------------------needs a check---------------------------------------------
   describe("POST /readers/:readerId/books", () => {
     it("creates a new book for a given reader", (done) => {
       request(app)
-        .post(`/readers/${reader.id}/books`)
+        .post(`/books/${reader.id}/books`)
         .send({
           name: "Odyssey",
           author: "Homer",
+          genre: "Greek epic poem",
+          ISBN: "1234",
         })
         .then((res) => {
           expect(res.status).to.equal(201);
@@ -45,6 +50,8 @@ describe("/books", () => {
             .then((book) => {
               expect(book.name).to.equal("Odyssey");
               expect(book.author).to.equal("Homer");
+              expect(book.genre).to.equal("Greek epic poem");
+              expect(book.ISBN).to.equal("1234");
               expect(book.readerId).to.equal(reader.id);
               done();
             })
@@ -54,10 +61,12 @@ describe("/books", () => {
     });
     it("returns a 404 and does not create a book if the reader does not exist", (done) => {
       request(app)
-        .post("/readers/1234/books")
+        .post("/books/1234/books")
         .send({
           name: "Odyssey",
           author: "Homer",
+          genre: "Greek epic poem",
+          ISBN: "1234"
         })
         .then((res) => {
           expect(res.status).to.equal(404);
@@ -75,7 +84,7 @@ describe("/books", () => {
   describe("GET /books", () => {
     it("gets all book records", (done) => {
       request(app)
-        .get(`/readers/${reader.id}/books`)
+        .get(`/books/${reader.id}/books`)
         .then((res) => {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(3);
@@ -83,14 +92,14 @@ describe("/books", () => {
             const expected = books.find((a) => a.id === book.id);
             expect(book.name).to.equal(expected.name);
             expect(book.author).to.equal(expected.author);
+            expect(book.genre).to.equal(expected.genre);
+            expect(book.ISBN).to.equal(expected.ISBN);
           });
           done();
         })
         .catch((error) => done(error));
     });
   });
-
-  // Just started booksById nothing working yet so will pick up later.
   describe("GET /books/:id", () => {
     it("gets book by ID", (done) => {
       const book = books[0];
@@ -100,6 +109,8 @@ describe("/books", () => {
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal(book.name);
           expect(res.body.author).to.equal(book.author);
+          expect(res.body.genre).to.equal(book.genre);
+          expect(res.body.ISBN).to.equal(book.ISBN);
           done();
         })
         .catch((error) => done(error));
@@ -117,6 +128,7 @@ describe("/books", () => {
         .catch((error) => done(error));
     });
   });
+  //--------------------------------------------RE-DO-----------------------------------
   describe("PATCH /books/:id", () => {
     it("updates book name by id", (done) => {
       const book = books[0];
@@ -146,6 +158,36 @@ describe("/books", () => {
         })
         .catch((error) => done(error));
     });
+    //-----------------------------take a look ----------------------------------------------
+    it("updates book genre by id", (done) => {
+      const book = books[0];
+      request(app)
+        .patch(`/books/${book.id}`)
+        .send({ genre: "Philosophical novel" })
+        .then((res) => {
+          expect(res.status).to.equal(200);
+          Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+            expect(updatedBook.genre).to.equal("Philosophical novel");
+            done();
+          });
+        })
+        .catch((error) => done(error));
+    });
+    it("updates book ISBN by id", (done) => {
+      const book = books[0];
+      request(app)
+        .patch(`/books/${book.id}`)
+        .send({ ISBN: "4321" })
+        .then((res) => {
+          expect(res.status).to.equal(200);
+          Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+            expect(updatedBook.ISBN).to.equal("4321");
+            done();
+          });
+        })
+        .catch((error) => done(error));
+    });
+    //----------------------------take a look---------------------------------------------
     it("returns a 404 if the book does not exist", (done) => {
       request(app)
         .patch("/books/12345")
@@ -157,6 +199,7 @@ describe("/books", () => {
         .catch((error) => done(error));
     });
   });
+  //------------------------------------------------------------------------------------------
   describe("DELETE /books/:bookId", () => {
     it("deletes book record by id", (done) => {
       const book = books[0];
