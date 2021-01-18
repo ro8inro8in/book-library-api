@@ -30,7 +30,6 @@ exports.getBooks = (_, res) => {
   });
 };
 exports.getBooksById = (req, res) => {
-  console.log(111);
   const { id } = req.params;
   Book.findByPk(id).then((book) => {
     if (!book) {

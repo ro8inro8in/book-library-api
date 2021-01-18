@@ -16,10 +16,4 @@ router.patch('/:id', readerController.updateReader);
 
 router.delete('/:id', readerController.deletesReader);
 
-//router.post('/:id/books', booksController.create);
-
-//router.get('/:id/books', booksController.getBooks);
-
-//router.get('/:id', booksController.getBooksById);
-
 module.exports = router;

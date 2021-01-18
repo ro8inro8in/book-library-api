@@ -34,7 +34,7 @@ exports.updateReader = (req, res) => {
 exports.deletesReader = (req, res) => {
   const { id } = req.params;
   Reader.destroy({ where: { id } })
-.then((rowsDeleted) => {
+    .then((rowsDeleted) => {
       if (!rowsDeleted) {
         res.status(404).json({ error: "The reader could not be found" });
       } else {
