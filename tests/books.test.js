@@ -4,13 +4,9 @@ const app = require("../src/app");
 const { Reader, Book } = require("../src/models");
 
 describe("/books", () => {
-  let reader;
   let books;
-  let genre;
-  let ISBN;
   before(async () => {
     try {
-      await Reader.sequelize.sync();
       await Book.sequelize.sync();
     } catch (err) {
       console.log(err);
@@ -18,11 +14,11 @@ describe("/books", () => {
   });
   beforeEach(async () => {
     try {
-      await Reader.destroy({ where: {} });
       await Book.destroy({ where: {} });
       reader = await Reader.create({
         name: "Jane Doe",
         email: "J_Doe@email.com",
+        password: "Password1"
       });
       books = await Promise.all([
         Book.create({ name: "Odyssey", author: "Homer", genre: "Greek epic poem", ISBN: "1234" }),
@@ -35,83 +31,63 @@ describe("/books", () => {
   });
   //------------------------------needs a check---------------------------------------------
   describe("POST /readers/:readerId/books", () => {
-    it("creates a new book for a given reader", (done) => {
-      request(app)
-        .post(`/books/${reader.id}/books`)
-        .send({
+    it("creates a new book for a given reader", async () => {
+      const response = await request(app).post(`/books`).send({
           name: "Odyssey",
           author: "Homer",
           genre: "Greek epic poem",
           ISBN: "1234",
         })
         .then((res) => {
-          expect(res.status).to.equal(201);
           Book.findByPk(res.body.id, { raw: true })
             .then((book) => {
+              expect(res.status).to.equal(201);
               expect(book.name).to.equal("Odyssey");
               expect(book.author).to.equal("Homer");
               expect(book.genre).to.equal("Greek epic poem");
               expect(book.ISBN).to.equal("1234");
-              expect(book.readerId).to.equal(reader.id);
               done();
             })
             .catch((error) => done(error));
-          
         })
-        .catch((error) => done(error));
     });
-    it("returns a 404 if the name of book is null", async () => {
-      await request(app)
-        .post("/books/1234/books")
-        .send({
-          name: "Odyssey",
-          
-        })
-        .then((res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal("All fields must be completed.");
-        })
-        .catch((error) => done(error));
-    });
-    it("returns a 404 if the author is null", async () => {
-      await request(app)
-        .post("/books/1234/books")
-        .send({
-          author: "Homer",
-        })
-        .then((res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal("All fields must be completed.");
-        })
-        .catch((error) => done(error));
-    });
-    it("returns a 404 and does not create a book if the reader does not exist", (done) => {
+    it("returns a 404 if the name of book is null", (done) => {
       request(app)
-        .post("/books/1234/books")
+        .post("/books")
         .send({
-          name: "Odyssey",
-          author: "Homer",
-          genre: "Greek epic poem",
-          ISBN: "1234"
-          
+          author: 'Homer',
+          genre: 'Greek epic poem',
+          ISBN: '1234',
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal("The reader could not be found.");
-          Book.findAll()
-            .then((books) => {
-              expect(books.length).to.equal(3);
-              done();
-            })
-            .catch((error) => done(error));
+          expect(res.body.error[0]).to.equal("Name cannot be empty, please enter a book name.");
+          done()
         })
         .catch((error) => done(error));
     });
+    it("returns a 404 if the author is null", (done) => {
+      request(app)
+        .post("/books")
+        .send({
+          name: 'Odyssey',
+          genre: 'Greek epic poem',
+          ISBN: '1234',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error[0]).to.equal("Author cannot be empty, please enter an Author.");
+          done();
+        })
+        .catch((error) => done(error)); 
+    })
   });
+   
   describe("GET /books", () => {
+
     it("gets all book records", (done) => {
       request(app)
-        .get(`/books/${reader.id}/books`)
+        .get(`/books`)
         .then((res) => {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(3);

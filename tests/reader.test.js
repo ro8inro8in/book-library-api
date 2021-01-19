@@ -34,37 +34,38 @@ describe("/readers", () => {
       expect(insertedReaderRecords.email).to.equal("J_Doe@email.com");
       expect(insertedReaderRecords.password).to.equal("Password1");
     });
-//------------------------------------------------------------------------
-    it("returns a 404 if the name is null", async () => {
-      await request(app)
+    //------------------------------------------------------------------------
+    it("returns a 404 if the name is null", (done) => {
+      request(app)
         .post("/readers")
         .send({
-          name: "",
           email: "J_Doe@email.com",
-          password: "Pass",
-        })
-        .then((res) => {
+          password: "Password1",
+        }).then((res) => {
+        
+        //console.log(res.body)
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal("All fields must be completed.");
+          expect(res.body.error[0]).to.equal("Please enter your name");
+          done();
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the email is null", async () => {
-      await request(app)
+    it("returns a 404 if the email is null", (done) => {
+      request(app)
         .post("/readers")
         .send({
           name: "Jane Doe",
-          email: "",
-          password: "Pass",
+          password: "Password1",
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal("All fields must be completed.");
+          expect(res.body.error[0]).to.equal("Please enter your email");
+          done();
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the password is null", async () => {
-      await request(app)
+    it("returns a 404 if the password is null", (done) => {
+      request(app)
         .post("/readers")
         .send({
           name: "Jane Doe",
@@ -73,12 +74,13 @@ describe("/readers", () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal("All fields must be completed.");
+          expect(res.body.error[0]).to.equal("Password must be at least 8 characters.");
+          done()
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the reader email invalid", async () => {
-      await request(app)
+    it("returns a 404 if the reader email invalid", (done) => {
+     request(app)
         .post("/readers")
         .send({
           name: "Jane Doe",
@@ -87,12 +89,14 @@ describe("/readers", () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal("The email address is invalid.");
+          expect(res.body.error[0]).to.equal('Please enter a valid email');
+          done();
+          
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the password is less than 8 characters", async () => {
-      await request(app)
+    it("returns a 404 if the password is less than 8 characters", (done) => {
+      request(app)
         .post("/readers")
         .send({
           name: "Jane Doe",
@@ -101,13 +105,15 @@ describe("/readers", () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal(
+          expect(res.body.error[0]).to.equal(
             "Password must be at least 8 characters."
+    
           );
+          done();
         })
         .catch((error) => done(error));
     });
-  })
+  });
   //------------------------------------------------------------------------
   describe("with readers in the database", () => {
     let readers;

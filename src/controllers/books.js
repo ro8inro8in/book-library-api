@@ -7,21 +7,12 @@ exports.list = (req, res) => {
   Book.findAll().then((books) => res.status(200).json(books));
 };
 exports.create = (req, res) => {
-  Reader.findByPk(req.params.id)
-    .then((reader) => {
-      if (!reader) {
-        res.status(404).json({ error: "The reader could not be found." });
-      } else {
-        const data = req.body;
-        data.readerId = req.params.id;
-        Book.create(data, { include: "reader" })
-          .then((book) => res.status(201).json(book))
-          .catch((err) => console.log(err));
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).json(error);
+  Book
+    .create(req.body)
+    .then((book) => res.status(201).json(book))
+    .catch((error) => {  
+      const errors = error.errors.map((error) => error.message)    
+      res.status(404).json({error: errors});
     });
 };
 exports.getBooks = (_, res) => {
