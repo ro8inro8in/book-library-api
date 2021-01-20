@@ -1,52 +1,24 @@
 const { Book } = require("../models");
 
+const { Reader } = require("../models");
+const {
+  getAllItems,
+  createItem,
+  updateItem,
+  getItemById,
+  deleteItem,
+} = require('./helpers');
+
 /*exports.create = (req, res) => {
   res.status(200).send();
 };*/
-exports.list = (__, res) => {
-  Book.findAll().then((books) => res.status(200).json(books));
-};
-exports.createBook = (req, res) => {
-  Book
-    .create(req.body)
-    .then((book) => res.status(201).json(book))
-    .catch((error) => {  
-      const errors = error.errors.map((error) => error.message)    
-      res.status(404).json({error: errors});
-    });
-};
-exports.getBooks = (_, res) => {
-  Book.findAll().then((book) => {
-    res.status(200).json(book);
-  });
-};
-exports.getBooksById = (req, res) => {
-  const { id } = req.params;
-  Book.findByPk(id).then((book) => {
-    if (!book) {
-      res.status(404).json({ error: "The reader could not be found." });
-    } else {
-      res.status(200).json(book);
-    }
-  });
-};
-exports.updatesBook = (req, res) => {
-  const { id } = req.params;
-  Book.update(req.body, { where: { id } }).then(([rowsUpdated]) => {
-    if (!rowsUpdated) {
-      res.status(404).json({ error: "The reader could not be found." });
-    } else {
-      res.status(200).json(rowsUpdated);
-    }
-  });
-};
-exports.deletesBook = (req, res) => {
-  const { id } = req.params;
-  Book.destroy({ where: { id } }).then((rowsDeleted) => {
-    if (!rowsDeleted) {
-      res.status(404).json({ error: "The book could not be found." });
-    } else {
-      res.status(204).json({ message: "Deleted successfully" });
-    }
-  });
-};
+
+exports.createBook = (req, res) => { createItem(res, 'book', req.body); };
+
+exports.list = (req, res) => { getAllItems(res, 'book' );};
+
+exports.getBooksById = (req, res) => { getItemById(res, 'book', req.params.id);};
+
+exports.updatesBook = (req, res) => updateItem(res, 'book', req.body, req.params.id);
+
+exports.deletesBook = (req, res) => deleteItem(res, 'book', req.params.id);

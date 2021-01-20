@@ -118,12 +118,12 @@ describe("/books", () => {
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the artist does not exist", (done) => {
+    it("returns a 404 if the book does not exist", (done) => {
       request(app)
         .get("/books/12345")
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal("The reader could not be found.");
+          expect(res.body.error).to.equal("The book could not be found.");
           done();
         })
         .catch((error) => done(error));
@@ -194,7 +194,7 @@ describe("/books", () => {
         .patch("/books/12345")
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal("The reader could not be found.");
+          expect(res.body.error).to.equal("The book could not be found.");
           done();
         })
         .catch((error) => done(error));

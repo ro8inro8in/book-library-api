@@ -5,15 +5,15 @@ const router = express.Router();
 const readerController = require('../controllers/readers');
 
 //const booksController = require('../controllers/books');
+router
+    .route('/')
+    .post(readerController.createReader)
+    .get(readerController.getReaders);
 
-router.post('/', readerController.createReader);
-
-router.get('/', readerController.getReaders);
-
-router.get('/:id', readerController.getReaderById);
-
-router.patch('/:id', readerController.updateReader);
-
-router.delete('/:id', readerController.deleteReader);
-
+router 
+    .route('/:id')
+    .get(readerController.getReaderById)
+    .patch(readerController.updateReader)
+    .delete(readerController.deleteReader)
+ 
 module.exports = router;
