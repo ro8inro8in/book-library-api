@@ -1,6 +1,6 @@
 module.exports = (connection, DataTypes) => {
   const schema = {
-    name: {
+    title: {
       type: DataTypes.STRING,
             allowNull: false,
             validate: {

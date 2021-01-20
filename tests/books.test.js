@@ -21,9 +21,9 @@ describe("/books", () => {
         password: "Password1"
       });
       books = await Promise.all([
-        Book.create({ name: "Odyssey", author: "Homer", genre: "Greek epic poem", ISBN: "1234" }),
-        Book.create({ name: "Ishmael", author: "Daniel Quinn", genre: "Philosophical novel", ISBN: "4321" }),
-        Book.create({ name: "Tao Te Ching", author: "Lau Tzu", genre: "Philosophy", ISBN: "9876" }),
+        Book.create({ title: "Odyssey", author: "Homer", genre: "Greek epic poem", ISBN: "1234" }),
+        Book.create({ title: "Ishmael", author: "Daniel Quinn", genre: "Philosophical novel", ISBN: "4321" }),
+        Book.create({ title: "Tao Te Ching", author: "Lau Tzu", genre: "Philosophy", ISBN: "9876" }),
       ]);
     } catch (err) {
       console.log(err);
@@ -33,7 +33,7 @@ describe("/books", () => {
   describe("POST /readers/:readerId/books", () => {
     it("creates a new book for a given reader", async () => {
       const response = await request(app).post(`/books`).send({
-          name: "Odyssey",
+          title: "Odyssey",
           author: "Homer",
           genre: "Greek epic poem",
           ISBN: "1234",
@@ -42,7 +42,7 @@ describe("/books", () => {
           Book.findByPk(res.body.id, { raw: true })
             .then((book) => {
               expect(res.status).to.equal(201);
-              expect(book.name).to.equal("Odyssey");
+              expect(book.title).to.equal("Odyssey");
               expect(book.author).to.equal("Homer");
               expect(book.genre).to.equal("Greek epic poem");
               expect(book.ISBN).to.equal("1234");
@@ -70,7 +70,7 @@ describe("/books", () => {
       request(app)
         .post("/books")
         .send({
-          name: 'Odyssey',
+          title: 'Odyssey',
           genre: 'Greek epic poem',
           ISBN: '1234',
         })
@@ -93,7 +93,7 @@ describe("/books", () => {
           expect(res.body.length).to.equal(3);
           res.body.forEach((book) => {
             const expected = books.find((a) => a.id === book.id);
-            expect(book.name).to.equal(expected.name);
+            expect(book.title).to.equal(expected.title);
             expect(book.author).to.equal(expected.author);
             expect(book.genre).to.equal(expected.genre);
             expect(book.ISBN).to.equal(expected.ISBN);
@@ -110,7 +110,7 @@ describe("/books", () => {
         .get(`/books/${book.id}`)
         .then((res) => {
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal(book.name);
+          expect(res.body.title).to.equal(book.title);
           expect(res.body.author).to.equal(book.author);
           expect(res.body.genre).to.equal(book.genre);
           expect(res.body.ISBN).to.equal(book.ISBN);
@@ -135,11 +135,11 @@ describe("/books", () => {
       const book = books[0];
       request(app)
         .patch(`/books/${book.id}`)
-        .send({ name: "Ishmael" })
+        .send({ title: "Ishmael" })
         .then((res) => {
           expect(res.status).to.equal(200);
           Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
-            expect(updatedBook.name).to.equal("Ishmael");
+            expect(updatedBook.title).to.equal("Ishmael");
             done();
           });
         })

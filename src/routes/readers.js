@@ -4,7 +4,7 @@ const router = express.Router();
 
 const readerController = require('../controllers/readers');
 
-//const booksController = require('../controllers/books');
+
 router
     .route('/')
     .post(readerController.createReader)
