@@ -21,13 +21,13 @@ const getAllItems = (res, model) => {
 
 const createItem = (res, model, item) => {
   const Model = getModel(model);
-
-  return Model.create(item)
-    .then((newItemCreated) => res.status(201).json(newItemCreated))
+  //return
+   Model.create(item)
+    .then((reader) => res.status(201).json(reader))
     .catch((error) => {
-      const errorMessages = error.errors.map((e) => e.message);
-
-      return res.status(404).json({ errors: errorMessages });
+      const errorMessages = error.errors.map((error) => error.message);
+      //return 
+      res.status(404).json({ error: errorMessages });
     });
 };
 
