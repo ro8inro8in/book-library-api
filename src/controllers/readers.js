@@ -1,16 +1,22 @@
 const { Reader } = require("../models");
-
+const {
+  getAllItems,
+  createItem,
+  updateItem,
+  getItemById,
+  deleteItem,
+} = require('./helpers');
 /*exports.create = (req, res) => {
   res.status(200).send();
 };*/
 
-exports.create = (req, res) => {
+exports.createReader = (req, res) => {
   Reader
     .create(req.body)
     .then((reader) => res.status(201).json(reader))
     .catch((error) => {  
-      const errors = error.errors.map((error) => error.message)    
-      res.status(404).json({error: errors});
+      const errorMessages = error.errors.map((error) => error.message)    
+      res.status(404).json({ error: errorMessages} );
     });
 };
 exports.getReaders = (_, res) => {

@@ -1,12 +1,12 @@
-const { Reader, Book } = require("../models");
+const { Book } = require("../models");
 
 /*exports.create = (req, res) => {
   res.status(200).send();
 };*/
-exports.list = (req, res) => {
+exports.list = (__, res) => {
   Book.findAll().then((books) => res.status(200).json(books));
 };
-exports.create = (req, res) => {
+exports.createBook = (req, res) => {
   Book
     .create(req.body)
     .then((book) => res.status(201).json(book))

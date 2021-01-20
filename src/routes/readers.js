@@ -6,7 +6,7 @@ const readerController = require('../controllers/readers');
 
 //const booksController = require('../controllers/books');
 
-router.post('/', readerController.create);
+router.post('/', readerController.createReader);
 
 router.get('/', readerController.getReaders);
 
