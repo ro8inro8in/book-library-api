@@ -25,17 +25,20 @@ describe("/readers", () => {
         email: "J_Doe@email.com",
         password: "Password1",
       });
+      const insertedReaderRecords = await Reader.findByPk(response.body.id, {
+              raw: true,
+            });
       expect(response.status).to.equal(201);
       expect(response.body.name).to.equal("Jane Doe");
-      const insertedReaderRecords = await Reader.findByPk(response.body.id, {
-        raw: true,
-      });
+      expect(response.body.email).to.equal('J_Doe@email.com');
+      expect(response.body.password).to.equal(undefined);
+
       expect(insertedReaderRecords.name).to.equal("Jane Doe");
       expect(insertedReaderRecords.email).to.equal("J_Doe@email.com");
       expect(insertedReaderRecords.password).to.equal("Password1");
     });
     //------------------------------------------------------------------------
-    it("returns a 404 if the name is null", (done) => {
+    it("errors if the name is an empty string", (done) => {
       request(app)
         .post("/readers")
         .send({
@@ -48,7 +51,7 @@ describe("/readers", () => {
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the email is null", (done) => {
+    it("errors if the email is null", (done) => {
       request(app)
         .post("/readers")
         .send({
@@ -62,13 +65,12 @@ describe("/readers", () => {
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the password is null", (done) => {
+    it("errors if the password is null", (done) => {
       request(app)
         .post("/readers")
         .send({
           name: "Jane Doe",
           email: "J_Doe@email.com",
-          password: "",
         })
         .then((res) => {
           expect(res.status).to.equal(404);
@@ -77,7 +79,7 @@ describe("/readers", () => {
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the reader email invalid", (done) => {
+    it("errors if the reader email is in the wrong format", (done) => {
      request(app)
         .post("/readers")
         .send({
@@ -93,7 +95,7 @@ describe("/readers", () => {
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the password is less than 8 characters", (done) => {
+    it("errors if the password is less than 8 characters", (done) => {
       request(app)
         .post("/readers")
         .send({
@@ -145,7 +147,8 @@ describe("/readers", () => {
             expect(res.status).to.equal(200);
             expect(res.body.name).to.equal(readers.name);
             expect(res.body.email).to.equal(readers.email);
-            expect(res.body.password).to.equal(readers.password);
+            expect(res.body.password).to.equal(undefined);
+            
             done();
           })
           .catch((error) => done(error));
@@ -160,7 +163,8 @@ describe("/readers", () => {
             expect(res.status).to.equal(200);
             expect(res.body.name).to.equal(reader.name);
             expect(res.body.email).to.equal(reader.email);
-            expect(res.body.password).to.equal(reader.password);
+           //expect(res.body.password).to.equal(reader.password);
+            expect(res.body.password).to.equal(undefined);
             done();
           })
           .catch((error) => done(error));
