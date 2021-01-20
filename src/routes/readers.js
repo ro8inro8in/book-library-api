@@ -10,10 +10,10 @@ router.post('/', readerController.createReader);
 
 router.get('/', readerController.getReaders);
 
-router.get('/:id', readerController.readerId);
+router.get('/:id', readerController.getReaderById);
 
 router.patch('/:id', readerController.updateReader);
 
-router.delete('/:id', readerController.deletesReader);
+router.delete('/:id', readerController.deleteReader);
 
 module.exports = router;

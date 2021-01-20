@@ -42,8 +42,6 @@ describe("/readers", () => {
           email: "J_Doe@email.com",
           password: "Password1",
         }).then((res) => {
-        
-        //console.log(res.body)
           expect(res.status).to.equal(404);
           expect(res.body.error[0]).to.equal("Please enter your name");
           done();
@@ -172,7 +170,7 @@ describe("/readers", () => {
           .get("/readers/12345")
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The reader could not be found");
+            expect(res.body.error).to.equal("The reader could not be found.");
             done();
           })
           .catch((error) => done(error));
@@ -198,7 +196,7 @@ describe("/readers", () => {
           .patch("/readers/12345")
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The reader could not be found");
+            expect(res.body.error).to.equal("The reader could not be found.");
             done();
           })
           .catch((error) => done(error));
@@ -216,7 +214,7 @@ describe("/readers", () => {
       it("returns a 404 if the reader does not exist", async () => {
         const response = await request(app).delete("/readers/12345");
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal("The reader could not be found");
+        expect(response.body.error).to.equal("The reader could not be found.");
       });
     });
   });
