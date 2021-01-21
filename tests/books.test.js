@@ -1,7 +1,7 @@
 const request = require("supertest");
 const { expect } = require("chai");
 const app = require("../src/app");
-const { Reader, Book } = require("../src/models");
+const { Reader, Book, Genre } = require("../src/models");
 
 describe("/books", () => {
   let books;

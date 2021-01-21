@@ -1,7 +1,7 @@
 module.exports = (connection, DataTypes) => {
     const schema = {
-      title: DataTypes.STRING,    
-      author: DataTypes.STRING,
+     // title: DataTypes.STRING,    
+      //author: DataTypes.STRING,
       
       genre:  {
       type: DataTypes.STRING,
@@ -17,9 +17,12 @@ module.exports = (connection, DataTypes) => {
           }
       }
     },
-      ISBN: DataTypes.STRING,
+      //ISBN: DataTypes.STRING,
     };
   
     const genreModel = connection.define("genre", schema);
     return genreModel;
   };
+
+
+//removed title, author, ISBN

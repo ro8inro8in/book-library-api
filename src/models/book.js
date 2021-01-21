@@ -29,10 +29,12 @@ module.exports = (connection, DataTypes) => {
       }
     },
 
-    genre: DataTypes.STRING,
+   // genre: DataTypes.STRING,
     ISBN: DataTypes.STRING,
   };
 
   const bookModel = connection.define("book", schema);
   return bookModel;
 };
+
+// removed genre, 
