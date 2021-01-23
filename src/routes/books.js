@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 
 const router = express.Router();
 
-const booksController = require('../controllers/books');
+const booksController = require("../controllers/books");
 
 router
     .route('/')
@@ -10,9 +10,9 @@ router
     .post(booksController.createBook);
 
 router
-    .route('/:id')
-    .get(booksController.getBooksById)
-    .patch(booksController.updatesBook)
-    .delete(booksController.deletesBook)
+  .route("/:id")
+  .get(booksController.getBooksById)
+  .patch(booksController.updatesBook)
+  .delete(booksController.deletesBook);
 
 module.exports = router;

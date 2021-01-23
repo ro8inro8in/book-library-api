@@ -2,12 +2,15 @@ const request = require("supertest");
 const { expect } = require("chai");
 const app = require("../src/app");
 const { Reader, Book, Genre } = require("../src/models");
+//const genres = require("../src/models/genre");
 
 describe("/books", () => {
   let books;
+  let genres;
   before(async () => {
     try {
       await Book.sequelize.sync();
+
     } catch (err) {
       console.log(err);
     }
@@ -15,15 +18,21 @@ describe("/books", () => {
   beforeEach(async () => {
     try {
       await Book.destroy({ where: {} });
+      await Genre.destroy({ where: {} });
       reader = await Reader.create({
         name: "Jane Doe",
         email: "J_Doe@email.com",
         password: "Password1"
       });
+      genres = await Promise.all([
+        Genre.create({ genre: "Greek epic poem" }),
+        Genre.create({ genre: "Philosophical novel" }),
+        Genre.create({ genre: "Philosophy" })
+      ])
       books = await Promise.all([
-        Book.create({ title: "Odyssey", author: "Homer", genre: "Greek epic poem", ISBN: "1234" }),
-        Book.create({ title: "Ishmael", author: "Daniel Quinn", genre: "Philosophical novel", ISBN: "4321" }),
-        Book.create({ title: "Tao Te Ching", author: "Lau Tzu", genre: "Philosophy", ISBN: "9876" }),
+        Book.create({ title: "Odyssey", author: "Homer", genreId: genres[0].id, ISBN: "1234" }),
+        Book.create({ title: "Ishmael", author: "Daniel Quinn", genreId: genres[1].id, ISBN: "4321" }),
+        Book.create({ title: "Tao Te Ching", author: "Lau Tzu", genreId: genres[2].id, ISBN: "9876" }),
       ]);
     } catch (err) {
       console.log(err);
@@ -41,7 +50,7 @@ describe("/books", () => {
         .then((res) => {
           Book.findByPk(res.body.id, { raw: true })
             .then((book) => {
-              expect(res.status).to.equal(201);
+              expect(response.status).to.equal(201);
               expect(book.title).to.equal("Odyssey");
               expect(book.author).to.equal("Homer");
               expect(book.genre).to.equal("Greek epic poem");
@@ -87,7 +96,7 @@ describe("/books", () => {
 
     it("gets all book records", (done) => {
       request(app)
-        .get(`/books`)
+        .get('/books')
         .then((res) => {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(3);
@@ -162,15 +171,16 @@ describe("/books", () => {
     //-----------------------------take a look ----------------------------------------------
     it("updates book genre by id", (done) => {
       const book = books[0];
+      //console.log(book.id)
       request(app)
         .patch(`/books/${book.id}`)
-        .send({ genre: "Philosophical novel" })
+        .send({ genreId: genres[1].id })
         .then((res) => {
           expect(res.status).to.equal(200);
           Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
-            expect(updatedBook.genre).to.equal("Philosophical novel");
+            expect(updatedBook.genreId).to.equal(genres[1].id);
             done();
-          });
+          }).catch((error) => done(error));
         })
         .catch((error) => done(error));
     });

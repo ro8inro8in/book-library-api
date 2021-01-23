@@ -1,21 +1,22 @@
 const { Reader } = require("../models");
 const {
-  getAllItems,
+  getAllReaders,
   createItem,
   updateItem,
   getItemById,
   deleteItem,
-} = require('./helpers');
+} = require("./helpers");
 /*exports.create = (req, res) => {
   res.status(200).send();
 };*/
 
-exports.createReader = (req, res) => createItem(res, 'reader', req.body);
+exports.createReader = (req, res) => createItem(res, "reader", req.body);
 
-exports.getReaders = (_, res) => getAllItems(res, 'reader');
+exports.getReaders = (req, res) => getAllReaders(res, "reader");
 
-exports.getReaderById = (req, res) => getItemById(res, 'reader', req.params.id);
+exports.getReaderById = (req, res) => getItemById(res, "reader", req.params.id);
 
-exports.updateReader = (req, res) => updateItem(res, 'reader', req.body, req.params.id);
+exports.updateReader = (req, res) =>
+  updateItem(res, "reader", req.body, req.params.id);
 
-exports.deleteReader = (req, res) => deleteItem(res, 'reader', req.params.id);
+exports.deleteReader = (req, res) => deleteItem(res, "reader", req.params.id);

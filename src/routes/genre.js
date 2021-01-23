@@ -4,9 +4,12 @@ const router = express.Router();
 
 const genreController = require("../controllers/genre");
 
-// router
-//   .route("/:id")
+router.route("/").get(genreController.list).post(genreController.createGenre);
 
-//   .patch(genreController.updateBooks);
+router
+  .route("/:id")
+  .get(genreController.getGenreById)
+  .patch(genreController.updatesGenre)
+  .delete(genreController.deletesGenre);
 
 module.exports = router;

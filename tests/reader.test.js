@@ -144,6 +144,7 @@ describe("/readers", () => {
         request(app)
           .get("/readers")
           .then((res) => {
+            console.log(res.body)
             expect(res.status).to.equal(200);
             expect(res.body.name).to.equal(readers.name);
             expect(res.body.email).to.equal(readers.email);

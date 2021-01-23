@@ -23,7 +23,8 @@ const setupDatabase = () => {
   //Author.belongsTo(Book, { as: 'book' });
   //Genre.belongsTo(Book, { as: 'book' });
   //Genre.hasMany(Book);(Book, { as: 'book' });
-  Book.belongsTo(Genre);
+  Book.belongsTo(Genre, {as: "genre"});
+  Reader.hasMany(Book);
   // unsure whats going on hear ^^^VVV
 
   connection.sync({ alter: true });
