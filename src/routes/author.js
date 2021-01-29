@@ -2,17 +2,18 @@ const express = require("express");
 
 const router = express.Router();
 
-//const readerController = require('../controllers/reader');
+const authorController = require("../controllers/author");
 
-// router
-//     .route('/')
-//     .post(readerController.createReader)
-//     .get(readerController.getReaders);
-
-// router
-//     .route('/:id')
-//     .get(readerController.getReaderById)
-//     .patch(readerController.updateReader)
-//     .delete(readerController.deleteReader)
+router
+  .route("/")
+  //.get(authorController.list);
+  .post(authorController.create)
+  
+//problem with .get all passes until this is engaged.
+router
+  .route("/:id")
+  .get(authorController.getAuthorById)
+  .patch(authorController.updateAuthor)
+  .delete(authorController.deleteAuthor);
 
 module.exports = router;

@@ -1,10 +1,11 @@
 module.exports = (connection, DataTypes) => {
   const schema = {
-    title: DataTypes.STRING,
+    //title: DataTypes.STRING,
 
-    author: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         notEmpty: {
           args: [true],
@@ -17,10 +18,10 @@ module.exports = (connection, DataTypes) => {
       },
     },
 
-    genre: DataTypes.STRING,
-    ISBN: DataTypes.STRING,
+    //genre: DataTypes.STRING,
+    //ISBN: DataTypes.STRING,
   };
 
-  const authorModel = connection.define("author", schema);
+  const authorModel = connection.define("Author", schema);
   return authorModel;
 };

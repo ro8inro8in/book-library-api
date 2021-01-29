@@ -43,10 +43,11 @@ describe("/readers", () => {
         .post("/readers")
         .send({
           email: "J_Doe@email.com",
-          password: "Password1",
+          password: "Password111",
         }).then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error[0]).to.equal("Please enter your name");
+          //expect(res.body.password).to.equal(undefined)
+          expect(res.body).to.contain("Please enter your name");
           done();
         })
         .catch((error) => done(error));
@@ -60,7 +61,7 @@ describe("/readers", () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error[0]).to.equal("Please enter your email");
+          expect(res.body).to.contain("Please enter your email");
           done();
         })
         .catch((error) => done(error));
@@ -74,7 +75,7 @@ describe("/readers", () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error[0]).to.equal("Password must be at least 8 characters.");
+          expect(res.body).to.contain("Password must be at least 8 characters.");
           done()
         })
         .catch((error) => done(error));
@@ -89,7 +90,7 @@ describe("/readers", () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error[0]).to.equal('Please enter a valid email');
+          expect(res.body).to.contain('Please enter a valid email');
           done();
           
         })
@@ -105,7 +106,7 @@ describe("/readers", () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error[0]).to.equal(
+          expect(res.body).to.contain(
             "Password must be at least 8 characters."
     
           );
@@ -139,12 +140,12 @@ describe("/readers", () => {
         done();
       });
     });
-    describe("GET /readers", () => {
+    describe("GET /readers", async () => {
       it("gets all readers records", (done) => {
         request(app)
           .get("/readers")
           .then((res) => {
-            console.log(res.body)
+            //console.log(res.body)
             expect(res.status).to.equal(200);
             expect(res.body.name).to.equal(readers.name);
             expect(res.body.email).to.equal(readers.email);

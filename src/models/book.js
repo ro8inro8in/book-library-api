@@ -4,36 +4,48 @@ module.exports = (connection, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: {
-          args: [true],
-          msg: "Name cannot be empty, please enter a nook name.",
-        },
         notNull: {
           args: [true],
-          msg: "Name cannot be empty, please enter a book name.",
+          msg: 'Please enter the title',
+        },
+        notEmpty: {
+          args: [true],
+          msg: 'The book title cannot be empty',
         },
       },
     },
-    author: {
+    ISBN: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: {
-          args: [true],
-          msg: "Author cannot be empty, please enter an Author.",
-        },
         notNull: {
-          args: [true],
-          msg: "Author cannot be empty, please enter an Author.",
+          msg: 'Please enter the ISBN',
         },
       },
     },
-
-    // genre: DataTypes.STRING,
-    ISBN: DataTypes.STRING,
+    AuthorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: [true],
+          msg: 'Please enter the AuthorId',
+        },
+      },
+    },
+    GenreId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: [true],
+          msg: 'Please enter the GenreId',
+        },
+      },
+    },
   };
 
-  const bookModel = connection.define("book", schema);
+  const bookModel = connection.define("Book", schema);
   return bookModel;
 };
 

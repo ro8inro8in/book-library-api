@@ -6,9 +6,9 @@ const readerController = require("../controllers/readers");
 
 router
   .route("/")
-  .post(readerController.createReader)
-  .get(readerController.getReaders);
-
+  
+  .get(readerController.list)
+  .post(readerController.create);
 router
   .route("/:id")
   .get(readerController.getReaderById)

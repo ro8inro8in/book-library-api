@@ -21,11 +21,20 @@ const setupDatabase = () => {
 
   //Book.belongsTo(Reader, { as: 'reader' });
   //Author.belongsTo(Book, { as: 'book' });
-  //Genre.belongsTo(Book, { as: 'book' });
+ // Genre.belongsTo(Book, { as: 'book' });
   //Genre.hasMany(Book);(Book, { as: 'book' });
-  Book.belongsTo(Genre, {as: "genre"});
-  Reader.hasMany(Book);
+  // Book.belongsTo(Genre, {as: "genre"});
+  // Reader.hasMany(Book);
+  // Author.belongsTo(Book);
   // unsure whats going on hear ^^^VVV
+
+  Genre.hasMany(Book);
+  Book.belongsTo(Genre);
+  Author.hasMany(Book);
+  Book.belongsTo(Author);
+  Reader.hasMany(Book);
+  Book.belongsTo(Reader);
+
 
   connection.sync({ alter: true });
   return {

@@ -1,18 +1,18 @@
 const { Reader } = require("../models");
 const {
-  getAllReaders,
   createItem,
-  updateItem,
+  getAllItems,
   getItemById,
+  updateItem,
   deleteItem,
 } = require("./helpers");
 /*exports.create = (req, res) => {
   res.status(200).send();
 };*/
 
-exports.createReader = (req, res) => createItem(res, "reader", req.body);
+exports.create = (req, res) => createItem(res, "reader", req.body);
 
-exports.getReaders = (req, res) => getAllReaders(res, "reader");
+exports.list = (req, res) => getAllItems(res, "reader");
 
 exports.getReaderById = (req, res) => getItemById(res, "reader", req.params.id);
 

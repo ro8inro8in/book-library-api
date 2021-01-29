@@ -12,7 +12,7 @@ const {
   res.status(200).send();
 };*/
 
-exports.createGenre = (req, res) => {
+exports.create = (req, res) => {
   createItem(res, "genre", req.body);
 };
 
@@ -24,8 +24,8 @@ exports.getGenreById = (req, res) => {
   getItemById(res, "genre", req.params.id);
 };
 
-exports.updatesGenre = (req, res) =>
+exports.updateGenre = (req, res) =>
   updateItem(res, "genre", req.body, req.params.id);
 
 
-exports.deletesGenre = (req, res) => deleteItem(res, "genre", req.params.id);
+exports.deleteGenre = (req, res) => deleteItem(res, "genre", req.params.id);

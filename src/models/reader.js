@@ -35,6 +35,6 @@ module.exports = (connection, DataTypes) => {
       },
     },
   };
-  const readerModel = connection.define("reader", schema);
+  const readerModel = connection.define("Reader", schema);
   return readerModel;
 };
