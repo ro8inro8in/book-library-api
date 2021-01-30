@@ -92,26 +92,41 @@ describe("/books", () => {
             Genre.create({ name: "Philosophical novel" }),
             Genre.create({ name: "Philosophy" }),
           ]);
+          // genres = [
+          //   {
+          //     name: "Greek epic poem",
+          //     id: 1
+          //   },
+          //   {
+          //     name: "Philosophical novel",
+          //     id: 2
+          //   },
+          //   {
+          //     name: "Philosophy",
+          //     id: 3
+          //   },
+          // ]
           books = await Promise.all([
             Book.create({
               title: "Odyssey",
-              AuthorId: authors[0],
-              genreId: genres[0].id,
+              AuthorId: authors[0].id,
+              GenreId: genres[0].id,
               ISBN: "1234",
             }),
             Book.create({
               title: "Ishmael",
-              AuthorId: authors[1],
-              genreId: genres[1].id,
+              AuthorId: authors[1].id,
+              GenreId: genres[1].id,
               ISBN: "4321",
             }),
             Book.create({
               title: "Tao Te Ching",
-              AuthorId: authors[2],
-              genreId: genres[2].id,
+              AuthorId: authors[2].id,
+              GenreId: genres[2].id,
               ISBN: "9876",
             }),
           ]);
+          
     //       var GroupMock = DBConnectionMock.define('groups', {
     // 'name': 'My Awesome Group',
 // });
@@ -122,7 +137,7 @@ describe("/books", () => {
       });
       describe("GET /books", () => {
         console.log(555555);
-        it.only("gets all book records", (done) => {
+        it("gets all book records", (done) => {
           request(app)
             .get("/books")
             .then((res) => {
