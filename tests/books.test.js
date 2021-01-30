@@ -112,19 +112,25 @@ describe("/books", () => {
               ISBN: "9876",
             }),
           ]);
+    //       var GroupMock = DBConnectionMock.define('groups', {
+    // 'name': 'My Awesome Group',
+// });
+
         } catch (err) {
           console.log(err);
         }
       });
       describe("GET /books", () => {
         console.log(555555);
-        it("gets all book records", (done) => {
+        it.only("gets all book records", (done) => {
           request(app)
             .get("/books")
             .then((res) => {
+              console.log(res.body)
               expect(res.status).to.equal(200);
               expect(res.body.length).to.equal(3);
               res.body.forEach((book) => {
+               
                 const expected = books.find((a) => a.id === book.id);
                 expect(book.title).to.equal(expected.title);
                 expect(book.AuthorId).to.equal(expected.AuthorId);
